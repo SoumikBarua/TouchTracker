@@ -74,6 +74,20 @@ class DrawView: UIView {
         for touch in touches {
             let key = NSValue(nonretainedObject: touch)
             currentLines[key]?.end = touch.location(in: self)
+            
+            let beginX = currentLines[key]?.begin.x
+            let beginY = currentLines[key]?.begin.y
+            let endX = currentLines[key]?.end.x
+            let endY = currentLines[key]?.end.y
+            if (Float(beginX!) < Float(endX!)) && (Float(beginY!) > Float(endY!)) {
+                currentLinesColor = UIColor.blue
+            } else if (Float(beginX!) > Float(endX!)) && (Float(beginY!) > Float(endY!)) {
+                currentLinesColor = UIColor.red
+            } else if (Float(beginX!) < Float(endX!)) && (Float(beginY!) < Float(endY!)) {
+                currentLinesColor = UIColor.yellow
+            } else {
+                currentLinesColor = UIColor.green
+            }
         }
         
         setNeedsDisplay()
