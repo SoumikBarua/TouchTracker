@@ -14,6 +14,8 @@
 		32B5B0F621B20C470081D8CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32B5B0F421B20C470081D8CC /* LaunchScreen.storyboard */; };
 		32B5B10121B20C470081D8CC /* TouchTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5B10021B20C470081D8CC /* TouchTrackerTests.swift */; };
 		32B5B10C21B20C470081D8CC /* TouchTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5B10B21B20C470081D8CC /* TouchTrackerUITests.swift */; };
+		32B5B11A21B20D200081D8CC /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5B11921B20D200081D8CC /* Line.swift */; };
+		32B5B11C21B20DF20081D8CC /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5B11B21B20DF20081D8CC /* DrawView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		32B5B10721B20C470081D8CC /* TouchTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TouchTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32B5B10B21B20C470081D8CC /* TouchTrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchTrackerUITests.swift; sourceTree = "<group>"; };
 		32B5B10D21B20C470081D8CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		32B5B11921B20D200081D8CC /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		32B5B11B21B20DF20081D8CC /* DrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +104,8 @@
 				32B5B0EB21B20C460081D8CC /* AppDelegate.swift */,
 				32B5B0ED21B20C460081D8CC /* ViewController.swift */,
 				32B5B0EF21B20C460081D8CC /* Main.storyboard */,
+				32B5B11921B20D200081D8CC /* Line.swift */,
+				32B5B11B21B20DF20081D8CC /* DrawView.swift */,
 				32B5B0F221B20C470081D8CC /* Assets.xcassets */,
 				32B5B0F421B20C470081D8CC /* LaunchScreen.storyboard */,
 				32B5B0F721B20C470081D8CC /* Info.plist */,
@@ -256,7 +262,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32B5B11A21B20D200081D8CC /* Line.swift in Sources */,
 				32B5B0EE21B20C460081D8CC /* ViewController.swift in Sources */,
+				32B5B11C21B20DF20081D8CC /* DrawView.swift in Sources */,
 				32B5B0EC21B20C460081D8CC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -363,7 +371,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -417,7 +425,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
