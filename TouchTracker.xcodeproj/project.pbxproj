@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32A41B7C21B3167700460D13 /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A41B7B21B3167700460D13 /* Circle.swift */; };
 		32B5B0EC21B20C460081D8CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5B0EB21B20C460081D8CC /* AppDelegate.swift */; };
 		32B5B0EE21B20C460081D8CC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5B0ED21B20C460081D8CC /* ViewController.swift */; };
 		32B5B0F121B20C460081D8CC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32B5B0EF21B20C460081D8CC /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		32A41B7B21B3167700460D13 /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		32B5B0E821B20C460081D8CC /* TouchTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32B5B0EB21B20C460081D8CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		32B5B0ED21B20C460081D8CC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				32B5B0EF21B20C460081D8CC /* Main.storyboard */,
 				32B5B11921B20D200081D8CC /* Line.swift */,
 				32B5B11B21B20DF20081D8CC /* DrawView.swift */,
+				32A41B7B21B3167700460D13 /* Circle.swift */,
 				32B5B0F221B20C470081D8CC /* Assets.xcassets */,
 				32B5B0F421B20C470081D8CC /* LaunchScreen.storyboard */,
 				32B5B0F721B20C470081D8CC /* Info.plist */,
@@ -262,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32A41B7C21B3167700460D13 /* Circle.swift in Sources */,
 				32B5B11A21B20D200081D8CC /* Line.swift in Sources */,
 				32B5B0EE21B20C460081D8CC /* ViewController.swift in Sources */,
 				32B5B11C21B20DF20081D8CC /* DrawView.swift in Sources */,
