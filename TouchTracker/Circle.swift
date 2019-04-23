@@ -11,6 +11,8 @@ import CoreGraphics
 
 struct Circle {
     
-    var firstCorner: CGFloat
-    var secondCorner: CGFloat
+    var cornerOneBegin = CGPoint.zero
+    var cornerOneEnd = CGPoint.zero
+    var cornerTwoBegin = CGPoint.zero
+    var cornerTwoEnd = CGPoint.zero
 }

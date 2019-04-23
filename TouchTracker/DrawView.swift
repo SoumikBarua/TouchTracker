@@ -10,7 +10,9 @@ import UIKit
 
 class DrawView: UIView, UIGestureRecognizerDelegate {
     var currentLines = [NSValue:Line]()
+    var currentCircle = [NSValue:Circle]()
     var finishedLines = [Line]()
+    var finishedCircles = [Circle]()
     var selectedLineIndex: Int? {
         didSet {
             if selectedLineIndex == nil {
@@ -19,8 +21,8 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
             }
         }
     }
+    var longPressRecognizer: UILongPressGestureRecognizer!
     var moveRecognizer: UIPanGestureRecognizer!
-    var panLineIndex: Int?
     
     @IBInspectable var finishedLinesColor: UIColor = UIColor.black {
         didSet {
@@ -40,6 +42,18 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
+    @IBInspectable var finishedCirclesColor: UIColor = UIColor.orange {
+        didSet{
+            setNeedsDisplay()
+        }
+    }
+    
+    @IBInspectable var currentCircleColor: UIColor = UIColor.gray {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
     func stroke(_ line: Line) {
         let path = UIBezierPath()
         path.lineWidth = lineThickness
@@ -47,6 +61,36 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         
         path.move(to: line.begin)
         path.addLine(to: line.end)
+        path.stroke()
+    }
+    
+    func fill(_ circle: Circle) {
+        var originX: CGFloat
+        var originY: CGFloat
+        if circle.cornerOneEnd.x <= circle.cornerTwoEnd.x {
+            originX = circle.cornerOneEnd.x
+        } else {
+            originX = circle.cornerTwoEnd.x
+        }
+        if circle.cornerOneEnd.y <= circle.cornerTwoEnd.y {
+            originY = circle.cornerOneEnd.y
+        } else {
+            originY = circle.cornerTwoEnd.y
+        }
+        let originPoint = CGPoint(x: originX, y: originY)
+        
+        let circleSize: CGSize
+        let circleWidth = fabs(circle.cornerOneEnd.x-circle.cornerTwoEnd.x)
+        let circleHeight = fabs(circle.cornerOneEnd.y-circle.cornerTwoEnd.y)
+        if circleWidth <= circleHeight {
+            circleSize = CGSize(width: circleWidth, height: circleWidth)
+        } else {
+            circleSize = CGSize(width: circleHeight, height: circleHeight)
+        }
+        
+        let customRect = CGRect(origin: originPoint, size: circleSize)
+        
+        let path = UIBezierPath(ovalIn: customRect)
         path.stroke()
     }
     
@@ -63,65 +107,123 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
             stroke(line)
         }
         
+        // Make the colored of the selected line green
         if let index = selectedLineIndex {
             UIColor.green.setStroke()
             let selectedLine = finishedLines[index]
             stroke(selectedLine)
         }
+        
+        // Draw finished circles in purple
+        finishedCirclesColor.setStroke()
+        for circle in finishedCircles {
+            fill(circle)
+        }
+        
+        // Draw current cicle in grey
+        currentCircleColor.setStroke()
+        for (_, circle) in currentCircle {
+            fill(circle)
+        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print(#function)
-        for touch in touches {
-            let location = touch.location(in: self)
+        if event?.allTouches?.count == 2 {
+            var cornerOneLocation, cornerTwoLocation: CGPoint?
+            let key = NSValue(nonretainedObject: touches.first)
+            for (i, touch) in touches.enumerated() {
+                if i == 0 {
+                    cornerOneLocation = touch.location(in: self)
+                } else {
+                    cornerTwoLocation = touch.location(in: self)
+                }
+            }
+            let newCircle = Circle(cornerOneBegin: cornerOneLocation!, cornerOneEnd: cornerOneLocation!, cornerTwoBegin: cornerTwoLocation!, cornerTwoEnd: cornerTwoLocation!)
             
-            let newLine = Line(begin: location, end: location)
+            currentCircle[key] = newCircle
             
-            let key = NSValue(nonretainedObject: touch)
-            currentLines[key] = newLine
+        } else {
+            for touch in touches {
+                let location = touch.location(in: self)
+                
+                let newLine = Line(begin: location, end: location)
+                
+                let key = NSValue(nonretainedObject: touch)
+                currentLines[key] = newLine
+            }
         }
-        
         setNeedsDisplay()
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         print(#function)
         
-        for touch in touches {
-            let key = NSValue(nonretainedObject: touch)
-            currentLines[key]?.end = touch.location(in: self)
+        if event?.allTouches?.count == 2 {
+            // For circles
+            let key = NSValue(nonretainedObject: touches.first)
             
-            let beginX = currentLines[key]?.begin.x
-            let beginY = currentLines[key]?.begin.y
-            let endX = currentLines[key]?.end.x
-            let endY = currentLines[key]?.end.y
-            if (Float(beginX!) < Float(endX!)) && (Float(beginY!) > Float(endY!)) {
-                currentLinesColor = UIColor.blue
-            } else if (Float(beginX!) > Float(endX!)) && (Float(beginY!) > Float(endY!)) {
-                currentLinesColor = UIColor.red
-            } else if (Float(beginX!) < Float(endX!)) && (Float(beginY!) < Float(endY!)) {
-                currentLinesColor = UIColor.yellow
-            } else {
-                currentLinesColor = UIColor.green
+            for (i, touch) in touches.enumerated() {
+                if i == 0 {
+                    currentCircle[key]?.cornerOneEnd = touch.location(in: self)
+                } else {
+                    currentCircle[key]?.cornerTwoEnd = touch.location(in: self)
+                }
+            }
+        } else {
+            
+            // For lines
+            for touch in touches {
+                let key = NSValue(nonretainedObject: touch)
+                currentLines[key]?.end = touch.location(in: self)
+                
+                let beginX = currentLines[key]?.begin.x
+                let beginY = currentLines[key]?.begin.y
+                let endX = currentLines[key]?.end.x
+                let endY = currentLines[key]?.end.y
+                if (Float(beginX!) < Float(endX!)) && (Float(beginY!) > Float(endY!)) {
+                    currentLinesColor = UIColor.blue
+                } else if (Float(beginX!) > Float(endX!)) && (Float(beginY!) > Float(endY!)) {
+                    currentLinesColor = UIColor.red
+                } else if (Float(beginX!) < Float(endX!)) && (Float(beginY!) < Float(endY!)) {
+                    currentLinesColor = UIColor.yellow
+                } else {
+                    currentLinesColor = UIColor.green
+                }
             }
         }
-        
         setNeedsDisplay()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         print(#function)
         
-        for touch in touches {
-            let key = NSValue(nonretainedObject: touch)
-            if var line = currentLines[key] {
-                line.end = touch.location(in: self)
-                
-                finishedLines.append(line)
-                currentLines.removeValue(forKey: key)
+        if event?.allTouches?.count == 2 {
+            // For circles
+            let key = NSValue(nonretainedObject: touches.first)
+            
+            for (i, touch) in touches.enumerated() {
+                if i == 0 {
+                    currentCircle[key]?.cornerOneEnd = touch.location(in: self)
+                } else {
+                    currentCircle[key]?.cornerTwoEnd = touch.location(in: self)
+                }
+            }
+            finishedCircles.append(currentCircle[key]!)
+            currentCircle.removeAll()
+        } else {
+            // For lines
+            for touch in touches {
+                let key = NSValue(nonretainedObject: touch)
+                if var line = currentLines[key] {
+                    line.end = touch.location(in: self)
+                    
+                    finishedLines.append(line)
+                    currentLines.removeValue(forKey: key)
+                }
             }
         }
-        
         setNeedsDisplay()
     }
     
@@ -129,6 +231,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         // Log statement to see the order of events
         print(#function)
         
+        currentCircle.removeAll()
         currentLines.removeAll()
         
         setNeedsDisplay()
@@ -147,7 +250,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         tapRecognizer.require(toFail: doubleTapRecognizer)
         addGestureRecognizer(tapRecognizer)
         
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(DrawView.longPress(_:)))
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(DrawView.longPress(_:)))
         addGestureRecognizer(longPressRecognizer)
         
         moveRecognizer = UIPanGestureRecognizer(target: self, action: #selector(DrawView.moveLine(_:)))
@@ -161,6 +264,7 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         
         currentLines.removeAll()
         finishedLines.removeAll()
+        finishedCircles.removeAll()
         selectedLineIndex = nil
         setNeedsDisplay()
     }
@@ -235,22 +339,28 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         
         if gestureRecognizer.state == .began {
             let point = gestureRecognizer.location(in: self)
-            panLineIndex = indexOfLine(at: point)
+            selectedLineIndex = indexOfLine(at: point)
             
-            if panLineIndex != nil {
+            if selectedLineIndex != nil {
                 currentLines.removeAll()
             }
         } else if gestureRecognizer.state == .ended {
-            panLineIndex = nil
+            selectedLineIndex = nil
         }
         setNeedsDisplay()
     }
     
     @objc func moveLine(_ gestureRecognizer: UIPanGestureRecognizer) {
         print("Recognized a pan")
+        //print("pan speed is \(moveRecognizer.velocity(in: self))")
+        //print("x value is \(moveRecognizer.velocity(in: self).x)")
+        
+        guard longPressRecognizer.state == .changed else {
+            return
+        }
         
         // If a line is seelcted
-        if let index = panLineIndex {
+        if let index = selectedLineIndex {
             // When the pan recognizer changes its position
             if gestureRecognizer.state == .changed {
                 // How far has the pan moved?
