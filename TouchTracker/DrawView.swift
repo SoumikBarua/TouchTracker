@@ -80,8 +80,8 @@ class DrawView: UIView, UIGestureRecognizerDelegate {
         let originPoint = CGPoint(x: originX, y: originY)
         
         let circleSize: CGSize
-        let circleWidth = fabs(circle.cornerOneEnd.x-circle.cornerTwoEnd.x)
-        let circleHeight = fabs(circle.cornerOneEnd.y-circle.cornerTwoEnd.y)
+        let circleWidth = abs(circle.cornerOneEnd.x-circle.cornerTwoEnd.x)
+        let circleHeight = abs(circle.cornerOneEnd.y-circle.cornerTwoEnd.y)
         if circleWidth <= circleHeight {
             circleSize = CGSize(width: circleWidth, height: circleWidth)
         } else {
